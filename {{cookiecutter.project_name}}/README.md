@@ -33,7 +33,7 @@ git clone https://github.com/your-username/{{cookiecutter.project_name}}.git
 cd {{cookiecutter.project_name}}
 
 conda env create -f environment.yml
-conda activate torch-env
+conda activate lightning
 ```
 
 ### 2\. Configure Tracking (Optional)
@@ -50,7 +50,7 @@ nano .env  # Add your COMET_API_KEY and COMET_WORKSPACE
 Running tasks follows the **PyTorch Lightning** workflow. Each task (training, evaluation, or testing) is fully configured via a YAML file and called with the Lightning CLI.
 
 ```bash
-python main.py --config ./config/mnist.yaml
+python main.py fit --config ./config/mnist.yaml
 ```
 
 For more information about how to set the parameters for a task, please refer to the [**Lightning documentation**](https://lightning.ai/docs/pytorch/stable/cli/lightning_cli_advanced.html).
@@ -89,3 +89,10 @@ self.tracker = EmissionsTracker(
       * `testing`: Energy consumed during the testing phase.
 
 > You can customize this behavior by creating a `.codecarbon.config` file in the project's root directory. See the [CodeCarbon documentation](https://mlco2.github.io/codecarbon/usage.html#configuration) for details.
+
+
+## TODO
+
+- [ ] Post-Training quantization
+- [ ] ONNX Export
+- [ ] TensorRT Export

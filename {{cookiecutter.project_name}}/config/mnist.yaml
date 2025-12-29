@@ -1,8 +1,9 @@
-trainer:
-  default_root_dir: ./saved_experiments
-  max_epochs: 10
+seed_everything: true
+trainer:  
+  max_epochs: 1
   precision: 32-true
   callbacks: 
+    - class_path: lightning.pytorch.callbacks.RichProgressBar
     - class_path: lightning.pytorch.callbacks.ModelCheckpoint
       init_args:
         monitor: val_loss
@@ -18,17 +19,22 @@ trainer:
         project_name: "{{cookiecutter.project_name}}"
         save_to_file: False
         log_level: error
+        experiment_name: ${data.class_path}_${model.class_path}_${timestamp:%Y%m%d_%H%M%S}
   logger:
     class_path: lightning.pytorch.loggers.CometLogger
-    init_args:
+    dict_kwargs:
       api_key: ${oc.env:COMET_API_KEY}
       workspace: ${oc.env:COMET_WORKSPACE}
       project: "{{cookiecutter.project_name}}"
+      log_env_details: False
+      online: True
+      offline_directory: ./saved_experiments
+      name: ${data.class_path}_${model.class_path}_${timestamp:%Y%m%d_%H%M%S}
 model:
   class_path: DefaultNN
   init_args:
     in_channels: 1
-    out_channels: 3
+    out_channels: 10
     criterion:
       class_path: torch.nn.CrossEntropyLoss
       init_args:

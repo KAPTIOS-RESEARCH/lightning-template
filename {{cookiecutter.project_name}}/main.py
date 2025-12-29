@@ -4,8 +4,13 @@ from src.datasets import *
 warnings.filterwarnings("ignore")
 from dotenv import load_dotenv
 from lightning.pytorch.cli import LightningCLI
+from omegaconf import OmegaConf
 from datetime import datetime
-from comet_ml import CometExperiment 
+
+OmegaConf.register_new_resolver(
+    "timestamp",
+    lambda fmt="%Y%m%d_%H%M%S": datetime.now().strftime(fmt),
+)
 
 class CustomLightningCLI(LightningCLI):
     def add_arguments_to_parser(self, parser):
