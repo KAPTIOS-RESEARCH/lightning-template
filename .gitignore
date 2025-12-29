@@ -3,3 +3,6 @@
 __pycache__
 .env
 data/
+saved_experiments/
+.cometml-runs/
+powermetrics_log.txt
