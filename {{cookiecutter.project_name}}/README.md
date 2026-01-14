@@ -2,7 +2,7 @@
 
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![PyTorch Lightning](https://img.shields.io/badge/Lightning-792EE5?style=for-the-badge&logo=lightning&logoColor=white)
-![Comet ML](https://img.shields.io/badge/Comet-000000?style=for-the-badge&logo=comet&logoColor=white)
+![MLFlow](https://img.shields.io/badge/MLFlow-000000?style=for-the-badge&logo=mlflow&logoColor=white)
 ![CodeCarbon](https://img.shields.io/badge/CodeCarbon-00C853?style=for-the-badge&logo=leaflet&logoColor=white)
 
 
@@ -59,14 +59,13 @@ For more information about how to set the parameters for a task, please refer to
 
 ## 📊 Tracking & Logging
 
-### 📈 Experiment Tracking with Comet ML
+### 📈 Experiment Tracking with MLFlow
 
-This template is fully integrated with [Comet ML](https://www.comet.com). When you provide a valid API key in your `.env` file, the framework will automatically:
+This template is fully integrated with [MLFlow](https://www.mlflow.org). When you provide valid env variables in your `.env` file, the framework will automatically:
 
   * Log all hyperparameters from your `.yaml` config.
   * Track training, validation, and test metrics (e.g., loss, accuracy) in real-time.
   * Save your model checkpoints.
-  * Upload generated artifacts (like the `emissions.csv` from CodeCarbon).
 
 ### 🌍 Energy Consumption Tracking
 
