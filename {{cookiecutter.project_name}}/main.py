@@ -1,9 +1,9 @@
-import logging, warnings, torch, os
+import logging, warnings, torch, mlflow, os
 from src.models import *
 from src.datasets import *
 warnings.filterwarnings("ignore")
-from dotenv import load_dotenv
 from lightning.pytorch.cli import LightningCLI
+from lightning.pytorch.loggers import MLFlowLogger
 from omegaconf import OmegaConf
 from datetime import datetime
 
@@ -16,19 +16,45 @@ class CustomLightningCLI(LightningCLI):
     def add_arguments_to_parser(self, parser):
         parser.add_optimizer_args(torch.optim.Adam)
         parser.add_lr_scheduler_args(torch.optim.lr_scheduler.ExponentialLR)
+    
+    def before_fit(self):
+        """Hook called before training starts"""
+        config_file = getattr(self.config, "config", None)
         
+        if config_file and os.path.exists(config_file):
+            if isinstance(self.trainer.logger, MLFlowLogger):
+                mlflow.log_artifact(config_file, artifact_path="config")
+                logging.info(f"✓ Logged config file: {config_file}")
+
+        if isinstance(self.trainer.logger, MLFlowLogger):
+            mlflow.log_params({
+                "environment": os.getenv("ENVIRONMENT", "development"),
+                "git_commit": os.getenv("GIT_COMMIT", "unknown"),
+            })
+
+    
+    def after_fit(self):
+        """Hook called after training"""
+        if isinstance(self.trainer.logger, MLFlowLogger):
+            run_id = self.trainer.logger.run_id
+            
+            mlflow.pytorch.log_model(
+                self.model,
+                artifact_path="model",
+                registered_model_name=self.model.__class__.__name__.lower()
+            )
+            
+            val_loss = self.trainer.callback_metrics.get('val_loss', None)
+            val_acc = self.trainer.callback_metrics.get('val_acc', None)
+            
+            logging.info(f"✓ Model logged to MLflow")
+            logging.info(f"  Run ID: {run_id}")
+            logging.info(f"  Val Loss: {val_loss}")
+            logging.info(f"  Val Acc: {val_acc}")
+            
 def cli_main():
     
     project_name = "{{cookiecutter.project_name}}"
-    if os.path.exists(".env"):
-        load_dotenv(".env")
-        logging.info("Loaded .env")
-    elif os.path.exists(".env.example"):
-        load_dotenv(".env.example")
-        logging.info("Loaded .env.example")
-    else:
-        logging.error("No .env or .env.example file found")
-    logging.getLogger("comet-ml").setLevel(logging.ERROR)
 
     logging.basicConfig(
         level=logging.INFO,
@@ -36,15 +62,11 @@ def cli_main():
     )
     
     cli = CustomLightningCLI(
+        run=True,
         save_config_callback=None,
         parser_kwargs={"parser_mode": "omegaconf"}
     )
-    
-    # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    # logger = cli.trainer.logger
-    # experiment_name = f"{cli.config.data.class_path}_{cli.config.model.class_path}_{timestamp}"
-    # logger.experiment.set_name(experiment_name)
-    # logger.experiment.log_env_details = False
+
 
 if __name__ == "__main__":
     cli_main()

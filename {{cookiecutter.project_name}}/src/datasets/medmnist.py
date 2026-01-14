@@ -7,7 +7,7 @@ from medmnist import INFO
 class MedMNISTDataModule(L.LightningDataModule):
     def __init__(
         self,
-        data_dir: str = "./",
+        data_dir: str = "./data",
         name: str = "pathmnist",
         size: int = 28,
         as_rgb: bool = False,

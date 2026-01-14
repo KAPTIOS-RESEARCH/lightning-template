@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "{{cookiecutter.project_name}}"
+version = "0.1.0"
+description = "PyTorch Lightning training with MLflow tracking"
+authors = ["{{cookiecutter.author_name}}"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.12"
+torch = "2.9.1"
+torchmetrics = "1.8.2"
+codecarbon = "3.2.0"
+lightning = "2.6.0"
+torchvision = "0.24.1"
+mlflow = "^3.8.1"
+boto3 = "^1.42.19"
+psycopg2-binary = "^2.9.9"
+medmnist = "3.0.2"
+omegaconf = "2.3.0"
+python-dotenv = "1.2.1"
+jsonargparse = { version = "^4.33.0", extras = ["signatures"] }
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.10"
+ruff = "^0.1.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

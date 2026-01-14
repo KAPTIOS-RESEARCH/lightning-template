@@ -1,9 +1,6 @@
 from lightning.pytorch.callbacks import Callback
 from codecarbon import EmissionsTracker
 
-from lightning.pytorch.callbacks import Callback
-from codecarbon import EmissionsTracker
-
 class CodeCarbonCallback(Callback):
     def __init__(self, project_name: str, experiment_name: str, save_to_file: bool = False, log_level: str = 'error'):
         self.project_name = project_name
@@ -24,8 +21,17 @@ class CodeCarbonCallback(Callback):
     def _stop_task(self, trainer, phase: str):
         emissions = self.tracker.stop_task(phase)
         if trainer.logger and hasattr(trainer.logger, "experiment"):
-            trainer.logger.experiment.log_metric(f"{phase}_energy", emissions.energy_consumed)
-            trainer.logger.experiment.log_metric(f"{phase}_emissions", emissions.emissions)
+            
+            trainer.logger.experiment.log_param(
+                run_id=trainer.logger.run_id, 
+                key=f"{phase}_energy",  
+                value=emissions.energy_consumed)
+            
+            trainer.logger.experiment.log_param(
+                run_id=trainer.logger.run_id, 
+                key=f"{phase}_emissions", 
+                value=emissions.emissions)
+            
         return emissions
 
     def on_fit_start(self, trainer, pl_module):

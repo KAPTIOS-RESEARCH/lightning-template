@@ -21,15 +21,16 @@ trainer:
         log_level: error
         experiment_name: ${data.class_path}_${model.class_path}_${timestamp:%Y%m%d_%H%M%S}
   logger:
-    class_path: lightning.pytorch.loggers.CometLogger
+    class_path: lightning.pytorch.loggers.MLFlowLogger
     dict_kwargs:
-      api_key: ${oc.env:COMET_API_KEY}
-      workspace: ${oc.env:COMET_WORKSPACE}
-      project: "{{cookiecutter.project_name}}"
-      log_env_details: False
-      online: True
-      offline_directory: ./saved_experiments
-      name: ${data.class_path}_${model.class_path}_${timestamp:%Y%m%d_%H%M%S}
+      tracking_uri: ${oc.env:MLFLOW_TRACKING_URI}
+      experiment_name: image_classification
+      run_name: ${data.class_path}_${model.class_path}_${timestamp:%Y%m%d_%H%M%S}
+      log_model: true
+      tags:
+        config_file: baseline
+        git_commit: ${oc.env:GIT_COMMIT,unknown}
+        environment: ${oc.env:ENVIRONMENT,development}
 model:
   class_path: DefaultNN
   init_args:
