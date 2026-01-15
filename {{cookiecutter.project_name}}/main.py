@@ -47,6 +47,39 @@ class CustomLightningCLI(LightningCLI):
             val_loss = self.trainer.callback_metrics.get('val_loss', None)
             val_acc = self.trainer.callback_metrics.get('val_acc', None)
             
+                # logging.info("✓ Exporting ONNX model")
+
+                # # Example input (REQUIRED)
+                # # Option 1: hardcoded
+                # example_input = torch.randn(1, *self.model.example_input_shape)
+
+                # # Option 2: pull from datamodule (preferred)
+                # # example_input = next(iter(self.trainer.datamodule.train_dataloader()))[0][:1]
+
+                # onnx_path = "artifacts/model.onnx"
+
+                # export_onnx(
+                #     model=self.model,
+                #     example_input=example_input,
+                #     output_path=onnx_path,
+                #     opset=export_cfg.get("opset", 17),
+                # )
+
+                # mlflow.log_artifact(onnx_path, artifact_path="onnx")
+
+                # # ---------- QUANTIZED ONNX ----------
+                # if export_cfg.get("quantized", False):
+                #     quant_path = "artifacts/model_quant.onnx"
+
+                #     export_quantized_onnx(
+                #         fp32_onnx_path=onnx_path,
+                #         output_path=quant_path,
+                #     )
+
+                #     mlflow.log_artifact(quant_path, artifact_path="onnx")
+
+                #     logging.info("✓ Quantized ONNX exported")
+            
             logging.info(f"✓ Model logged to MLflow")
             logging.info(f"  Run ID: {run_id}")
             logging.info(f"  Val Loss: {val_loss}")

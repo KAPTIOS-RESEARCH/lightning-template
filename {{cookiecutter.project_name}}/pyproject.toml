@@ -18,6 +18,10 @@ psycopg2-binary = "^2.9.9"
 medmnist = "3.0.2"
 omegaconf = "2.3.0"
 python-dotenv = "1.2.1"
+onnx = "1.20.1"
+onnxruntime = "1.23.2"
+onnxruntime-tools = "1.7.0"
+dvc = "*"
 jsonargparse = { version = "^4.33.0", extras = ["signatures"] }
 
 [tool.poetry.group.dev.dependencies]

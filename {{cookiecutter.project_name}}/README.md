@@ -26,23 +26,25 @@ This project provides a flexible and easy-to-use set of tools for rapid model de
 
 ### 1\. Installation
 
-First, clone the repository and create the Conda environment from the provided file:
+First, clone the repository and install the dependencies using poetry :
 
 ```bash
 git clone https://github.com/your-username/{{cookiecutter.project_name}}.git
 cd {{cookiecutter.project_name}}
 
-conda env create -f environment.yml
-conda activate lightning
+# Install Poetry (if not already installed)
+curl -sSL https://install.python-poetry.org | python3 -
+poetry install
+poetry shell
 ```
 
-### 2\. Configure Tracking (Optional)
+### 2\. Configure Tracking
 
-This template uses **Comet** for experiment tracking. To enable it, create a `.env` file from the example and add your credentials:
+This template uses **MLFlow** for experiment tracking. To enable it, create a `.env` file from the example and add your credentials:
 
 ```bash
 cp .env.example .env
-nano .env  # Add your COMET_API_KEY and COMET_WORKSPACE
+nano .env  # Add your MLFLOW_TRACKING_URI variable
 ```
 
 ### 3. Run training, evaluation and testing
