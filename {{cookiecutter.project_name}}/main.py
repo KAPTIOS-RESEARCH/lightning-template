@@ -6,6 +6,7 @@ from lightning.pytorch.cli import LightningCLI
 from lightning.pytorch.loggers import MLFlowLogger
 from omegaconf import OmegaConf
 from datetime import datetime
+from dotenv import load_dotenv
 
 OmegaConf.register_new_resolver(
     "timestamp",
@@ -87,6 +88,15 @@ class CustomLightningCLI(LightningCLI):
             
 def cli_main():
     
+    if os.path.exists(".env"):
+        load_dotenv(".env")
+        logging.info("Loaded .env")
+    elif os.path.exists(".env.example"):
+        load_dotenv(".env.example")
+        logging.info("Loaded .env.example")
+    else:
+        logging.error("No .env or .env.example file found")
+        
     project_name = "{{cookiecutter.project_name}}"
 
     logging.basicConfig(
